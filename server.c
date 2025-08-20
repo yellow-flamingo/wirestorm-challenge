@@ -168,6 +168,47 @@ void close_connection(int nbytes, int sender_fd, int *fd_count, struct pollfd *f
 }
 
 /*
+* concat_two_bytes - Concatanates two bytes into one 16 bit word. 
+* @return: the 16 bit word
+*/
+uint16_t concat_two_bytes(uint8_t left_byte, uint8_t right_byte) {
+    uint16_t word = left_byte << 8 | right_byte;
+    return word;
+}
+
+/*
+* calculate_checksum - Calculates the checksum of the message by 
+* performing the one's complement sum of all 16 bit words in the message.
+* @return: the calculated checksum
+*/
+uint16_t calculate_checksum(char *message, int length) {
+
+	uint32_t sum = 0;
+
+	// Add together all 16 bit words in the message
+	for (int i=0; i<length-1; i+=2) {
+		if (i == 4) {
+			sum += 0xcccc;
+		} else {
+            sum += concat_two_bytes((uint8_t)message[i], (uint8_t)message[i+1]);
+		}
+	}
+
+	// Check if there's an extra byte at the end
+	if (length % 2 != 0) {
+		sum += (uint8_t)message[length-1] << 8;
+	}
+
+	// Deal with carry bit
+	while (sum >> 16) {
+		sum = (sum & 0xFFFF) + (sum >> 16);
+	}
+
+	// Return the one's complement of the sum
+	return (uint16_t)(~sum);
+}
+
+/*
 * check_header - Checks that the magic number and options fields are valid
 * and that the necessary padding is present in the header. 
 * @return: 0 if valid, -1 otherwise
@@ -176,8 +217,10 @@ int check_header(char *header) {
     if ((unsigned char)header[0] != 0xcc) {
         fprintf(stderr, "Invalid magic number\n");
         return -1;
-    // concatenate the 2nd set of 4 padding bytes and check all padding bytes are set to 0
-    } else if (header[1] != 0x0 || ((header[4] << 24) | (header[5] << 16) | (header[6] << 8) | header[7]) != 0x0) {
+    } else if (header[1] != 0x40 && header[1] != 0x0){ // Options field should be 01000000 or 00000000
+        fprintf(stderr, "Invalid options field\n");
+        return -1;
+    } else if (header[6] != 0x0 || header[7] != 0x0) { // Should be 2 bytes of padding
         fprintf(stderr, "Incorrect padding\n");
         return -1;
     }
@@ -218,7 +261,7 @@ void handle_dst_client_data(int *fd_count, struct pollfd *fds, int *fd_i) {
 /*
  * handle_src_client_data - Handles data from the src client
  * Calls close_connection() if the client hangs up or errors.
- * Broadcasts the message to the destination clients if the header and length are valid
+ * Broadcasts the message to the destination clients if the header, length and checksum are all valid
  * Drops the message if not.
  */
 void handle_src_client_data(ConnectionsInfo *fd_info, struct pollfd *fds, int *fd_i)
@@ -239,7 +282,8 @@ void handle_src_client_data(ConnectionsInfo *fd_info, struct pollfd *fds, int *f
 	} else if (num_message_bytes < HEADER_LENGTH) { // header too short
 		fprintf(stderr, "Error receiving header\n");
     } else {
-        uint16_t length_field = (uint8_t)message_buf[2] << 8 | (uint8_t)message_buf[3];
+        uint16_t length_field = concat_two_bytes((uint8_t)message_buf[2], (uint8_t)message_buf[3]);
+        uint16_t checksum = concat_two_bytes((uint8_t)message_buf[4], (uint8_t)message_buf[5]);
         
         int actual_length = num_message_bytes - HEADER_LENGTH;
 
@@ -251,7 +295,13 @@ void handle_src_client_data(ConnectionsInfo *fd_info, struct pollfd *fds, int *f
         }
 
         if (length_ok && check_header(message_buf) == 0) {
-            broadcast_message(message_buf, num_message_bytes, fd_info, fds);          
+            // Validate the checksum if the sensitive bit is set
+            if ((message_buf[1] == 0x40 && calculate_checksum(message_buf, num_message_bytes) == checksum) || message_buf[1] == 0x0) {
+                // Broadcast the message to all destination clients
+				broadcast_message(message_buf, num_message_bytes, fd_info, fds);					
+            } else {
+                fprintf(stderr, "Invalid checksum\n"); // Checksum not correct so message not broadcasted
+            }            
         }
     } 
 }
