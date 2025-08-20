@@ -10,3 +10,7 @@ My solution to the CoreTech Wirestorm challenge. The solution and tests for part
 5. Run the server: ```./server```
 6. In a separate terminal window, run the tests: ```python3 tests.py```
 7. If all the tests pass, a success message will be shown
+
+To build the part 1 solution and run those tests:
+1. Checkout to branch 'part_1': ```git checkout part_1```
+2. Compile and run the server and tests file as explained above
