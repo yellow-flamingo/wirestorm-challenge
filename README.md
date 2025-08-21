@@ -2,6 +2,13 @@
 
 My solution to the CoreTech Wirestorm challenge. The solution and tests for part 1 of the challenge can be found in branch 'part_1'.
 
+## Features
+The program:
+- Allows a single source client to connect on port 33333
+- Allows multiple destination clients to connect on port 44444
+- Validates messages sent by the source client to check they are of the format specificed by the CTMP
+- Broadcasts valid messages to all the destination clients
+
 ## Building and Verifying
 1. Open a terminal window
 2. Clone the repository: ```git clone https://github.com/yellow-flamingo/wirestorm-challenge.git```
