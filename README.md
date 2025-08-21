@@ -3,8 +3,8 @@
 My solution to the CoreTech Wirestorm challenge. The solution and tests for part 1 of the challenge can be found in branch 'part_1'.
 
 ## Building and Verifying
-1. Clone the repository
-2. Open a terminal window
+1. Open a terminal window
+2. Clone the repository: ```git clone https://github.com/yellow-flamingo/wirestorm-challenge.git```
 3. ```cd``` into the repository
 4. Compile the server code: ```gcc -o server server.c```
 5. Run the server: ```./server```
