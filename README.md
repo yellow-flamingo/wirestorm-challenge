@@ -50,7 +50,7 @@ To build the part 1 solution and run those tests:
 
 ## Usage
 You can make a connection to the relevant ports using netcat and send some data to see the proxy in action:
-Connect a source client to port 33333 on localhost: ```nc localhost 33333```
-Connect a destination client to port 44444 on localhost ```nc localhost 44444```
+- Connect a source client to port 33333 on localhost: ```nc localhost 33333```
+- Connect a destination client to port 44444 on localhost ```nc localhost 44444```
 
 Note: The code in chapter 7.2 of Beej's Guide To Network Programming (which can be found here: https://beej.us/guide/bgnet/pdf/bgnet_a4_c_1.pdf), was used as a starting point and then adapted.
