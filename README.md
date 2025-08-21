@@ -14,3 +14,5 @@ My solution to the CoreTech Wirestorm challenge. The solution and tests for part
 To build the part 1 solution and run those tests:
 1. Checkout to branch 'part_1': ```git checkout part_1```
 2. Compile and run the server and tests file as explained above
+
+Note: The code in chapter 7.2 of Beej's Guide To Network Programming (which can be found here: https://beej.us/guide/bgnet/pdf/bgnet_a4_c_1.pdf), was used as a starting point and then adapted.
