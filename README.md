@@ -3,7 +3,7 @@
 My solution to the CoreTech Wirestorm challenge. The solution and tests for part 1 of the challenge can be found in branch 'part_1'.
 
 ## CoreTech Message Protocol (CTMP)
-CTMP is a custom messaging protocol that defines 
+CTMP is a custom messaging protocol designed to encapsulate large data transfers over TCP.
 The header of basic messages (handled by the server in branch 'part_1') must have the following form:
     0               1               2               3
     0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
