@@ -5,28 +5,12 @@ My solution to the CoreTech Wirestorm challenge. The solution and tests for part
 ## CoreTech Message Protocol (CTMP)
 CTMP is a custom messaging protocol designed to encapsulate large data transfers over TCP.<br/>
 The header of basic messages (handled by the server in branch 'part_1') must have the following form:<br/>
-    0               1               2               3<br/>
-    0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    | MAGIC 0xCC    | PADDING       | LENGTH                      |<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    | PADDING                                                     |<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    | DATA ...................................................... |<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7<br/>
+<img width="656" height="262" alt="image" src="https://github.com/user-attachments/assets/4a303a6d-304e-4612-8b22-c9f56f4df0f1" />
+
 
 The header of advanced messages (handled by the server in the 'main' branch) must have the following form:<br/>
-    0               1               2               3<br/>
-    0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    | MAGIC 0xCC    | OPTIONS       | LENGTH                      |<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    | CHECKSUM                      | PADDING                     |<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    | DATA ...................................................... |<br/>
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<br/>
-    0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7<br/>
+<img width="656" height="262" alt="image" src="https://github.com/user-attachments/assets/1f550494-0bb4-46eb-b8bb-e020146cfee7" />
+
 
 ## Features
 The proxy:
